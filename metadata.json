@@ -1,0 +1,14 @@
+{
+  "description": "Internet speed meter extension for the Gnome Shell",
+  "name": "Internet Speed Meter",
+  "shell-version": [
+    "45",
+    "46",
+    "47",
+    "48",
+    "49"
+  ],
+  "url": "https://github.com/AliHzSec/gnome-internet-speed-meter",
+  "uuid": "SpeedMeter@AliHzSec.com",
+  "version": 1
+}

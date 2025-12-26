@@ -1,0 +1,29 @@
+/*
+ * Name: SpeedMeter: Internet Speed Meter
+ * Description: A simple and minimal internet speed meter extension for Gnome Shell.
+ * Author: Ali Hamidi
+ * GitHub: https://github.com/AliHzSec
+ * License: GPLv3.0
+ */
+
+/* ====================================================================
+    PANEL LABEL - Speed display in the top panel
+   ==================================================================== */
+
+.speedmeter-speed-label {
+    min-width: 220px;
+    text-align: center;
+    padding: 0 8px;
+}
+
+
+/* ====================================================================
+    RESPONSIVE ADJUSTMENTS
+   ==================================================================== */
+
+/* Ensure the label doesn't overflow on smaller screens */
+@media (max-width: 768px) {
+    .speedmeter-speed-label {
+        min-width: 180px;
+    }
+}
