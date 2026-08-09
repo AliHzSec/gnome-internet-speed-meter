@@ -7,6 +7,7 @@
  */
 
 import Clutter from "gi://Clutter";
+import Gio from "gi://Gio";
 import GLib from "gi://GLib";
 import GObject from "gi://GObject";
 import Shell from "gi://Shell";
@@ -27,6 +28,23 @@ const BYTES_TO_MEGABYTES = UNIT_BASE * UNIT_BASE;
 const VIRTUAL_INTERFACE_PATTERN = /^(lo|br|tun|tap|vnet|virbr|docker|veth|wg|vmbr|vbox|vmnet)\d*(-[\w-]+)?$/;
 
 /**
+ * Get the system default interface font as a CSS style string
+ * @returns {string} CSS style with font-family and font-size, or empty string
+ */
+function getSystemFontStyle() {
+    try {
+        const settings = new Gio.Settings({ schema_id: 'org.gnome.desktop.interface' });
+        const fontName = settings.get_string('font-name'); // e.g. 'Cantarell 11'
+        const match = fontName.match(/^(.*?)[\s,]+(\d+(?:\.\d+)?)$/);
+        if (match)
+            return `font-family: '${match[1].trim()}'; font-size: ${match[2]}pt;`;
+    } catch (e) {
+        console.error('SpeedMeter: Error reading system font:', e);
+    }
+    return '';
+}
+
+/**
  * SpeedMeterButton - Main panel button widget for the extension
  * Displays network speed only
  */
@@ -40,13 +58,22 @@ const SpeedMeterButton = GObject.registerClass(
             this._prevUploadBytes = 0;
             this._prevDownloadBytes = 0;
 
-            // Create speed label for panel
+            // Create panel box layout (styled like a panel status button)
+            const panelBox = new St.BoxLayout({
+                y_align: Clutter.ActorAlign.CENTER,
+                style_class: 'panel-status-menu-box panel-button-box speedmeter-panel-box',
+                style: 'spacing: 6px;'
+            });
+            this.add_child(panelBox);
+
+            // Create speed label for panel (uses the system default font)
             this._speedLabel = new St.Label({
-                text: '↓ 0.00 MB/s  ↑ 0.00 MB/s',
+                text: '↓ 0.00 MB/s  ·  ↑ 0.00 MB/s',
                 style_class: 'speedmeter-speed-label',
+                style: getSystemFontStyle(),
                 y_align: Clutter.ActorAlign.CENTER
             });
-            this.add_child(this._speedLabel);
+            panelBox.add_child(this._speedLabel);
 
             // Start speed monitoring
             this._startSpeedUpdate();
@@ -123,12 +150,12 @@ const SpeedMeterButton = GObject.registerClass(
                 const upMBps = uploadSpeed / BYTES_TO_MEGABYTES;
 
                 this._speedLabel.set_text(
-                    `↓ ${downMBps.toFixed(2)} MB/s  ↑ ${upMBps.toFixed(2)} MB/s`
+                    `↓ ${downMBps.toFixed(2)} MB/s  ·  ↑ ${upMBps.toFixed(2)} MB/s`
                 );
 
             } catch (e) {
                 console.error('SpeedMeter: Error updating speed:', e);
-                this._speedLabel.set_text('↓ -.-- MB/s  ↑ -.-- MB/s');
+                this._speedLabel.set_text('↓ -.-- MB/s  ·  ↑ -.-- MB/s');
             }
         }
 
