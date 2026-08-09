@@ -20,8 +20,8 @@ import * as Main from "resource:///org/gnome/shell/ui/main.js";
 import * as PanelMenu from "resource:///org/gnome/shell/ui/panelMenu.js";
 
 // Update interval, in seconds. The speed shown is the traffic delta over
-// exactly this window, so 1 second gives a clean per-second reading.
-const REFRESH_INTERVAL_SECONDS = 1;
+// exactly this window, so 0.3 second gives a clean per-second reading.
+const REFRESH_INTERVAL_SECONDS = 0.3;
 
 // Binary units for speed formatting
 const UNIT_KB = 1024;
