@@ -7,10 +7,38 @@
  */
 
 /* ====================================================================
-    PANEL LABEL - Speed display in the top panel
+    PANEL PILL - rounded container with a white border, matching the
+    IP-Finder look. Adjust the border alpha below to make the white more
+    or less prominent.
+   ==================================================================== */
+
+.speedmeter-panel-box {
+    transition: all 0.2s ease;
+    background-color: rgba(30, 30, 30, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    padding: 2px 12px;
+    margin: 0 10px;
+}
+
+/* Suppress GNOME Shell's own built-in panel-button hover/focus/active
+   highlight so only our single pill border is visible (no extra border on
+   hover). Scoped to this widget via the 'speedmeter-button' class. */
+.panel-button.speedmeter-button:hover,
+.panel-button.speedmeter-button:focus,
+.panel-button.speedmeter-button:active {
+    background-color: transparent;
+    box-shadow: none;
+}
+
+/* ====================================================================
+    PANEL LABEL - Speed display text.
+    Font is Victor Mono (bundled) with a fallback to the system default
+    monospace family; size comes from JS.
    ==================================================================== */
 
 .speedmeter-speed-label {
+    font-family: 'Victor Mono', monospace;
     min-width: 220px;
     text-align: center;
     padding: 0 2px;
